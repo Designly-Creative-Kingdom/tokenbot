@@ -16,9 +16,12 @@ export class Config {
 
 	public async updateAll() {
 		this.general = {
-			developers: [],
+			developers: [''],
 			appealLink: '',
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5f8a59bc5960ff8c5f8eb21cf5f39440c14a0031
 		}
 		this.logging = {
 			webhook: new WebhookClient({ url: '' }),
