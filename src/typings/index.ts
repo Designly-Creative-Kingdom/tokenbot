@@ -66,7 +66,7 @@ type modalExecuteFunction = (options: modalExecuteOptions) => any;
 type selectMenuExecuteFunction = (options: selectMenuExecuteOptions) => any;
 type autocompleteFunction = (options: autocompleteOptions) => any;
 
-type commandDirectories = 'utility';
+type commandDirectories = 'utility' | 'economy' | 'bounty';
 
 export type interactionOptions = {
 	name: string;
@@ -151,17 +151,29 @@ export type EmojisConfigTypes =
 	| 'error'
 	| 'attention'
 	| 'ping'
+	| 'coin'
 
 
 export interface emojisConfigTypes {
 	success: string;
 	error: string;
 	attention: string;
-
+	coin: string;
 }
 
 export enum emojisConfigDefaults {
 	success = '✅',
 	error = '❌',
 	attention = '❗️',
+	coin = '🪙'
+}
+
+export enum RoleIDs {
+	comet = '1060029170710749194',
+	supporter = '1060024306815475814',
+	serverBooster = '890622688341671997',
+	professional = '999429787099603064',
+	expert = '999429514050412625',
+	advanced = '999429228992925788',
+	skilled = '999428975661170698'
 }

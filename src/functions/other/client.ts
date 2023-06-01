@@ -5,11 +5,13 @@ import { load } from 'js-yaml';
 import { existsSync, readFileSync } from 'node:fs';
 
 export const cc = {
+	designly: resolveColor('#F2223B'),
 	invisible: resolveColor('#2F3136'),
 	moderation: resolveColor('#dbca95'),
 	success: checkEmojis('success'),
 	error: checkEmojis('error'),
 	attention: checkEmojis('attention'),
+	coin: checkEmojis('coin'),
 };
 
 export const clientEmbeds = {

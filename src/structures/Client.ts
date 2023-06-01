@@ -1,10 +1,11 @@
-import { Client, Collection, ClientEvents, GatewayIntentBits, Partials } from 'discord.js';
+import { Client, Collection, ClientEvents, GatewayIntentBits, Partials, ActivityType } from 'discord.js';
 import { buttonType, commandType, modalType, selectMenuType } from '../typings';
 import { Event } from './Event';
 import { readdirSync } from 'fs';
 import { cc, clientEmbeds,  } from '../functions/other/client';
 import { Config } from './Config';
 import { connect } from 'mongoose';
+// import { logger } from '../logger';
 
 export class ExtendedClient extends Client {
 	public commands: Collection<string, commandType> = new Collection();
@@ -29,6 +30,12 @@ export class ExtendedClient extends Client {
 				Partials.Reaction,
 				Partials.Message
 			],
+			presence: {
+				activities: [{
+					type: ActivityType.Watching,
+					name: 'your tokens'
+				}]
+			}
 		});
 		this.born();
 	}
@@ -36,7 +43,10 @@ export class ExtendedClient extends Client {
 	private async born() {
 		// Connecting to MongoDB
 		if (process.env.MONGO_URL) {
-			await connect(process.env.MONGO_URL)
+			await connect(process.env.MONGO_URL, { dbName: 'alpaz' }).catch((e) => {
+				console.log(e)
+				// logger.error(e.name)
+			});
 		}
 		await this.registerModules();
 		await this.config.updateAll();

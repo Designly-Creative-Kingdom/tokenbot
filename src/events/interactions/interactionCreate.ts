@@ -15,12 +15,7 @@ export default new Event('interactionCreate', async (interaction) => {
 
 		if (!command)
 			return interaction.reply({
-				embeds: [
-					{
-						description: `No commands were found matching \`/${interaction.commandName}\``,
-						color: 0xCC0000,
-					},
-				],
+				embeds: [client.embeds.error(`There was no command found for **${interaction.commandName}**.`)],
 				ephemeral: true,
 			});
 
@@ -150,6 +145,7 @@ export default new Event('interactionCreate', async (interaction) => {
 		});
 	};
 	if (interaction.isModalSubmit()) {
+		if (interaction.customId.startsWith('cltr')) return;
 		const modalName = interaction.customId.split('-')[0];
 		const fields = interaction.fields;
 		
