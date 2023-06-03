@@ -74,7 +74,7 @@ export default new Event('interactionCreate', async (interaction) => {
 		if (!button) {
 			return interaction.reply({
 				embeds: [{
-					description: 'Nothing was found for this button. If you think this is an error, report it to <@784250655212044308>',
+					description: 'Nothing was found for this button.',
 					color: 0xCC0000
 				}], ephemeral: true
 			});
@@ -122,7 +122,7 @@ export default new Event('interactionCreate', async (interaction) => {
 		if (!selectMenu) {
 			return interaction.reply({
 				embeds: [{
-					description: 'Nothing was found for this select menu. If you think this is an error, report it to <@784250655212044308>',
+					description: 'Nothing was found for this select menu.',
 					color: 0xCC0000
 				}], ephemeral: true
 			});
@@ -154,7 +154,7 @@ export default new Event('interactionCreate', async (interaction) => {
 		if (!modal) {
 			return interaction.reply({
 				embeds: [{
-					description: 'Nothing was found for this modal. If you think this is an error, report it to <@784250655212044308>',
+					description: 'Nothing was found for this modal.',
 					color: 0xCC0000
 				}], ephemeral: true
 			});
