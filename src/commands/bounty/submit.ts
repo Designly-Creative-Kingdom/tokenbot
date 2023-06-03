@@ -40,9 +40,11 @@ export default new Command({
                 const submissionEmbed = new EmbedBuilder()
                     .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
                     .setTitle('New Bounty Submission')
-                    .setDescription(`${interaction.user.username} has submitted their work for the following prompt: **${bounty.title}**.` + link ? ` [Click here](${link}) to view the files for this bounty.` : `${null}` + attachments ? ` Find the attached files below.` : null)
+                    .setDescription(`${interaction.user.username} has submitted their work for the following prompt: **${bounty.title}**. ${link ? `[Click here](${link}) (${link}) to view the files for this bounty.` : ''}${attachments ? 'Find the attached files below.' : ' '}`)
                     .setFooter({ text: interaction.user.id })
                     .setTimestamp();
+                console.log(submissionEmbed);
+                
                 const submissionsRow = new ActionRowBuilder<ButtonBuilder>()
                     .addComponents([
                         new ButtonBuilder()
@@ -58,8 +60,8 @@ export default new Command({
                             .setLabel(`Delete`)
                             .setStyle(ButtonStyle.Secondary)
                     ])
-                await submissionsLog.threads.create({ name: `@${interaction.user.username} - ${bounty.title}`, message: { embeds: [submissionEmbed], components: [submissionsRow], files: [attachments ? attachments : null] }}).then((e) => e.send({ content: `This bounty closes on <t:${bounty.endDate}:F>`}))
-                await interaction.followUp({ embeds: [client.embeds.success('Your bounty has been submitted! Thanks for participating, and you will receive an update soon.')] });
+                await submissionsLog.threads.create({ name: `@${interaction.user.username} - ${bounty.title}`, message: { embeds: [submissionEmbed], components: [submissionsRow], files: attachments?.size > 0 ? [attachments]  : null }}).then((e) => e.send({ content: `This bounty closes on <t:${bounty.endDate}:F>`}))
+                await interaction.followUp({ embeds: [client.embeds.success('Your bounty has been submitted! Thanks for participating, and you will receive an update shortly.')] });
                 return await markAsPending(bounty._id, interaction.user.id);
             } else {
                 return interaction.followUp({ embeds: [client.embeds.attention('There is no submissions log set up. Please notify an admin.')] });

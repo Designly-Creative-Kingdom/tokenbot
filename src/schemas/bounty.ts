@@ -48,6 +48,13 @@ export async function checkIfCompleted(guildID: Snowflake, bountyID: any, userID
     return filter[0] || null;
 };
 
+export async function deleteSubmission(bountyID: any, userID: Snowflake) {
+    const bounty = await bountyModal.findOne({ _id: bountyID });
+    const removedSubmission = bounty.completedBy.filter((b) => { b.userId !== userID});
+    console.log(removedSubmission)
+    await bountyModal.findOneAndUpdate({ _id: bountyID }, { $set: { completedBy: removedSubmission } });
+}
+
 export async function getBountyByTimestamps(guildID: Snowflake, startDate: number, endDate: number) {
     const bounty = await bountyModal.findOne({ guildID, startDate, endDate });
     return bounty;

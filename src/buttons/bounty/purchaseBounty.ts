@@ -20,11 +20,11 @@ export default new Button({
         } else {
             const user = await getBalance(interaction.user.id, interaction.guild.id);
             if (Number(bounty.cost) > user.balance) {
-                return interaction.followUp({ embeds: [client.embeds.attention(`Uh oh! Looks like you don\'t have enough tokens to purchase this bounty.`)], ephemeral: true })
+                return interaction.followUp({ embeds: [client.embeds.attention(`Uh oh! Looks like you don\'t have enough nibs to purchase this bounty.`)], ephemeral: true })
             }
             await updateBalance(interaction.user.id, interaction.guild.id, user.balance - Number(bounty.cost));
             await purchaseBounty(interaction.guild.id, bounty._id, interaction.user.id);
-            await interaction.followUp({ embeds: [client.embeds.success(`You\'ve purchased this bounty for 🪙 ${bounty.cost}! Complete and submit this bounty to get a 200% ROI!`)], ephemeral: true });
+            await interaction.followUp({ embeds: [client.embeds.success(`You\'ve purchased this bounty for ${bounty.cost} nibs! Complete and submit this bounty to get a 200% ROI!`)], ephemeral: true });
             const bountyEmbed = new EmbedBuilder()
                 .setColor('White')
                 .setAuthor({ name: `Bounty Info`, iconURL: interaction.guild.iconURL() })
@@ -33,7 +33,7 @@ export default new Button({
                 .addFields(
                     { name: 'Start Date', value: `<t:${bounty.startDate}:F>`, inline: false },
                     { name: 'End Date', value: `<t:${bounty.endDate}:F>`, inline: false },
-                    { name: 'Cost', value: `${bounty.cost} tokens`, inline: false },
+                    { name: 'Cost', value: `${bounty.cost} nibs`, inline: false },
                 )
                 .setFooter({ text: `⚠️ Don\'t share this bounty info with anyone, doing so could result in a punishment!` })
             return await interaction.followUp({ embeds: [bountyEmbed], ephemeral: true });

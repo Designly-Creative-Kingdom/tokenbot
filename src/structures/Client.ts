@@ -5,6 +5,7 @@ import { readdirSync } from 'fs';
 import { cc, clientEmbeds,  } from '../functions/other/client';
 import { Config } from './Config';
 import { connect } from 'mongoose';
+import { logger } from '../logger';
 // import { logger } from '../logger';
 
 export class ExtendedClient extends Client {
@@ -43,7 +44,11 @@ export class ExtendedClient extends Client {
 	private async born() {
 		// Connecting to MongoDB
 		if (process.env.MONGO_URL) {
-			await connect(process.env.MONGO_URL, { dbName: 'alpaz' }).catch((e) => {
+			await connect(process.env.MONGO_URL, { dbName: 'alpaz' })
+				.then(() => {
+					logger.info('MongoDB Connected')
+				})
+				.catch((e) => {
 				console.log(e)
 				// logger.error(e.name)
 			});
