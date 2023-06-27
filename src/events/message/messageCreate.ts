@@ -11,16 +11,14 @@ export default new Event('messageCreate', async (message) => {
     const channel = (message.channel instanceof ThreadChannel) ? message.channel : message.channel;
     if (!(channel.id && guild.channels.includes(channel.id) && message.attachments.size > 0)) return;
 
-    const member = await getBalance(message.author.id, message.guild.id);
+    const member = await getBalance(message.author.id);
     if (member.cooldown) return;
     
     const memberRoles = message.member?.roles.cache!
-    let rand = (Math.floor(Math.random() * 4) + 2); rand = rand * 25 + rand;
+    let rand = (Math.floor(Math.random() * 4) + 2); rand = rand + rand;
 
-    if(memberRoles.has(RoleIDs.comet)){ //lord +
-        rand = rand * 3;
-    } else if (memberRoles.has(RoleIDs.supporter)) { //lord silver
-        rand = rand * 2;
+    if (memberRoles.has(RoleIDs.supereggie)){ //Super Eggie
+        rand = rand * 4;
     } else if (memberRoles.has(RoleIDs.serverBooster)) { //server booster
         rand = rand * 1.8;
     } else if (memberRoles.has(RoleIDs.professional)) { //professional
@@ -29,15 +27,15 @@ export default new Event('messageCreate', async (message) => {
         rand = rand * 1.4;
     } else if (memberRoles.has(RoleIDs.advanced)) { //advanced
         rand = rand * 1.2;
-    } else if (memberRoles.has(RoleIDs.skilled)) { //skilled
+    } else if (memberRoles.has(RoleIDs.adept)) {
         rand = rand * 1.1;
     }
 
-    await updateBalance(message.author.id, message.guild.id, member.balance + rand);
-    await setCooldown(message.author.id, message.guild.id, true)
+    await updateBalance(message.author.id, member.balance + rand);
+    await setCooldown(message.author.id, true)
         .then(async () => {
             setTimeout(async () => {
-                await setCooldown(message.author.id, message.guild.id, false);
+                await setCooldown(message.author.id, false);
             })
         })
 })

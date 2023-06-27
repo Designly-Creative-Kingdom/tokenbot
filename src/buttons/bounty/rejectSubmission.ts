@@ -51,7 +51,7 @@ export default new Button({
         const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 10000 });
         const userNotice = new EmbedBuilder()
             .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
-            .setDescription(`We have an update! Your bounty has been reviewed by ${interaction.user.toString} and was unfortunately rejected. Thanks for participating in this bounty and better luck next time.`)
+            .setDescription(`We have an update! Your bounty has been reviewed by ${interaction.user.toString()} and was unfortunately rejected. Thanks for participating in this bounty and better luck next time.`)
             .setColor(client.cc.designly)
             .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
     

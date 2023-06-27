@@ -15,6 +15,8 @@ export async function checkBounties() {
     const bountyBoardEmbed = new EmbedBuilder()
         .setColor(client.cc.designly)
         .setTitle('Bounty Board')
+        .setColor('DarkAqua')
+        .setImage('https://i.imgur.com/3F4Xomv.png')
         .setTimestamp()
     const bountyBoardRow = new ActionRowBuilder<ButtonBuilder>()
     if (!bounty) {

@@ -43,8 +43,7 @@ export default new Command({
                     .setDescription(`${interaction.user.username} has submitted their work for the following prompt: **${bounty.title}**. ${link ? `[Click here](${link}) (${link}) to view the files for this bounty.` : ''}${attachments ? 'Find the attached files below.' : ' '}`)
                     .setFooter({ text: interaction.user.id })
                     .setTimestamp();
-                console.log(submissionEmbed);
-                
+
                 const submissionsRow = new ActionRowBuilder<ButtonBuilder>()
                     .addComponents([
                         new ButtonBuilder()
@@ -57,7 +56,7 @@ export default new Command({
                             .setStyle(ButtonStyle.Danger),
                         new ButtonBuilder()
                             .setCustomId(`deleteSubmission-${bounty.startDate}-${bounty.endDate}`)
-                            .setLabel(`Delete`)
+                            .setLabel(`Refund`)
                             .setStyle(ButtonStyle.Secondary)
                     ])
                 await submissionsLog.threads.create({ name: `@${interaction.user.username} - ${bounty.title}`, message: { embeds: [submissionEmbed], components: [submissionsRow], files: attachments?.size > 0 ? [attachments]  : null }}).then((e) => e.send({ content: `This bounty closes on <t:${bounty.endDate}:F>`}))

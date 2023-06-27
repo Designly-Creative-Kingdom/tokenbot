@@ -18,11 +18,11 @@ export default new Button({
         if (alreadyBought) {
             return interaction.followUp({ embeds: [client.embeds.attention(`You\'ve already purchased this bounty! Press the **info** button to view more details about this bounty or use /submit to send in your completed work!`)], ephemeral: true  })
         } else {
-            const user = await getBalance(interaction.user.id, interaction.guild.id);
+            const user = await getBalance(interaction.user.id);
             if (Number(bounty.cost) > user.balance) {
                 return interaction.followUp({ embeds: [client.embeds.attention(`Uh oh! Looks like you don\'t have enough nibs to purchase this bounty.`)], ephemeral: true })
             }
-            await updateBalance(interaction.user.id, interaction.guild.id, user.balance - Number(bounty.cost));
+            await updateBalance(interaction.user.id, user.balance - Number(bounty.cost));
             await purchaseBounty(interaction.guild.id, bounty._id, interaction.user.id);
             await interaction.followUp({ embeds: [client.embeds.success(`You\'ve purchased this bounty for ${bounty.cost} nibs! Complete and submit this bounty to get a 200% ROI!`)], ephemeral: true });
             const bountyEmbed = new EmbedBuilder()

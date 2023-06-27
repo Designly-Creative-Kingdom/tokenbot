@@ -34,7 +34,7 @@ export class ExtendedClient extends Client {
 			presence: {
 				activities: [{
 					type: ActivityType.Watching,
-					name: 'your tokens'
+					name: 'your nibs'
 				}]
 			}
 		});
@@ -46,7 +46,7 @@ export class ExtendedClient extends Client {
 		if (process.env.MONGO_URL) {
 			await connect(process.env.MONGO_URL, { dbName: 'alpaz' })
 				.then(() => {
-					logger.info('MongoDB Connected')
+					logger.info('MongoDB Connected', { showDate: false })
 				})
 				.catch((e) => {
 				console.log(e)

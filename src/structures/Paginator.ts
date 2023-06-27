@@ -77,7 +77,7 @@ export class Paginator {
 		collector.on('collect', async (c): Promise<any> => {
 			if (c.user.id !== this.options.interaction.user.id)
 				return c.reply({ content: 'This button is not meant for you', ephemeral: true });
-
+			collector.resetTimer();
 			await this.nextPage(c);
 			await this.previousPage(c);
 		});

@@ -3,31 +3,31 @@ import { interactionOptions } from "../../typings";
 
 export const bankCommand = {
 	name: 'bank',
-	description: 'Manage the Designly Tokens™ bank.',
+	description: 'Manage the Designly Nibs™ bank.',
 	directory: 'utility',
 	cooldown: 5000,
 	permission: ['ManageGuild'],
 	options: [
 		{
 			name: 'give',
-			description: 'Give a member tokens.',
+			description: 'Give a member Nibs.',
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: 'user',
-					description: 'The user you want to grant tokens to.',
+					description: 'The user you want to grant Nibs to.',
 					type: ApplicationCommandOptionType.User,
 					required: true
 				},
 				{
-					name: 'tokens',
-					description: 'The amount of tokens you want to add to the user.',
+					name: 'nibs',
+					description: 'The amount of Nibs you want to add to the user.',
 					type: ApplicationCommandOptionType.Integer,
 					required: true
 				},
 				{
 					name: 'silent',
-					description: 'Whether or not you want to silently give the user coins.',
+					description: 'Whether or not you want to silently give the user nibs.',
 					type: ApplicationCommandOptionType.Boolean,
 					required: false
 				}
@@ -35,19 +35,19 @@ export const bankCommand = {
 		},
 		{
 			name: 'remove',
-			description: 'Remove tokens from a member.',
+			description: 'Remove nibs from a member.',
 			type: ApplicationCommandOptionType.Subcommand,
 			options: [
 				{
 					name: 'user',
-					description: 'The user you want to remove tokens from.',
+					description: 'The user you want to remove nibs from.',
 					type: ApplicationCommandOptionType.User,
 					required: true
 				},
 				{
-					name: 'tokens',
-					description: 'The amount of tokens you want to remove from the user.',
-					type: ApplicationCommandOptionType.Number,
+					name: 'nibs',
+					description: 'The amount of nibs you want to remove from the user.',
+					type: ApplicationCommandOptionType.Integer,
 					required: true
 				},
 				{
@@ -65,14 +65,14 @@ export const bankCommand = {
 			options: [
 				{
 					name: 'user',
-					description: 'The user you want to remove tokens from.',
+					description: 'The user you want to remove nibs from.',
 					type: ApplicationCommandOptionType.User,
 					required: true
 				},
 				{
-					name: 'tokens',
-					description: 'The amount of tokens you want to set the user\'s balance to.',
-					type: ApplicationCommandOptionType.Number,
+					name: 'nibs',
+					description: 'The amount of nibs you want to set the user\'s balance to.',
+					type: ApplicationCommandOptionType.Integer,
 					required: true
 				},
 				{

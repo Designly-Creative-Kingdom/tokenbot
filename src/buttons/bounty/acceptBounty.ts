@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilder, GuildTextBasedChannel, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { Button } from "../../structures/Button";
 import { checkIfCompleted, checkIfPurchased, getBountyByTimestamps, markAsAccepted } from "../../schemas/bounty";
-import { getBalance, updateBalance } from "../../schemas/user";
+import { addBounty, getBalance, updateBalance } from "../../schemas/user";
 
 export default new Button({
     customId: 'acceptSubmission',
@@ -50,7 +50,7 @@ export default new Button({
         const collector = response.createMessageComponentCollector({ componentType: ComponentType.Button, time: 10000 });
         const userNotice = new EmbedBuilder()
             .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
-            .setDescription(`We have an update! Your bounty has been reviewed by @${interaction.user.username} and was approved! You've gotten ${bounty.cost} tokens as a result! Thanks for participating in this bounty!`)
+            .setDescription(`We have an update! Your bounty has been reviewed by @${interaction.user.username} and was approved! You've gotten ${bounty.cost} nibs as a result! Thanks for participating in this bounty!`)
             .setColor(client.cc.designly)
             .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
         
@@ -90,14 +90,15 @@ export default new Button({
                             });
                         m.reply({ embeds: [client.embeds.success(DMerror ? `${interaction.user.username} was unable to receive the bounty notification.` : 'Your feedback has been provided to the user.')], ephemeral: true });
                         await markAsAccepted(bounty._id, bountyUser.id);
-                        await interaction.update({ components: [] });
+                        await interaction.message.edit({ components: [] });
                         await interaction.message.reply({ embeds: [modNotice], failIfNotExists: false });
-                        const user = await getBalance(bountyUser.user.id, interaction.guild.id);
-                        await updateBalance(bountyUser.id, interaction.guild.id, user.balance + Number(bounty.cost))
+                        const user = await getBalance(bountyUser.user.id);
+                        await updateBalance(bountyUser.id, user.balance + Number(bounty.cost));
+                        await addBounty(bountyUser.user.id);
                         return collector.stop('complete');
                         
                     }).catch(() => {
-                        collected.editReply({ embeds: [client.embeds.attention('You took too long to complete the modal.')] });
+                        collected.update({ components: [] })
                         return collector.stop();
                     });
             } else if (collected.customId == 'cltr-no') {
@@ -105,16 +106,16 @@ export default new Button({
                 await interaction.message.edit({ components: [] });
                 await interaction.message.reply({ embeds: [modNotice], failIfNotExists: false });
                 const general = await interaction.guild.channels.fetch(client.config.general.mainChannel) as GuildTextBasedChannel;
-                await general.send({ embeds: [{ color: 0xffee76, description: `Hey there ${bountyUser.toString()}! Your bounty has been reviewed by ${interaction.user.toString()} and was approved. Enjoy your ${Number(bounty.cost) * 2} nibs.`}] })
+                await general.send({ embeds: [{ color: 0xffee76, description: `Hey there ${bountyUser.toString()}! Your bounty has been reviewed by ${interaction.user.toString()} and was approved. Enjoy your ${Number(bounty.cost) * 2} nibs.`}], allowedMentions: { users: [bountyUser.id] } })
                 await markAsAccepted(bounty._id, bountyUser.id);
-                const user = await getBalance(bountyUser.user.id, interaction.guild.id);
-                await updateBalance(bountyUser.id, interaction.guild.id, user.balance + Number(bounty.cost))
+                const user = await getBalance(bountyUser.user.id);
+                await updateBalance(bountyUser.id, user.balance + Number(bounty.cost) * 2)
                 return collector.stop('complete');
             };
         });
         collector.on('end', async (_collector, reason) => {
             if (reason == 'complete') {
-                await interaction.update({ components: [] });
+                await interaction.message.edit({ components: [] });
             }
         })
     },

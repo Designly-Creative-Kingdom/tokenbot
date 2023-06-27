@@ -35,7 +35,7 @@ export async function getActive(guildID: Snowflake) {
     return itemModal.find({ guildID: guildID, active: true });
 }
 
-export async function getItemsByID(id: string) {
+export async function getItemByID(id: string) {
     return itemModal.findById(id)
 }
 

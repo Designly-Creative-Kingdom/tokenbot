@@ -2,9 +2,10 @@ import { Command } from '../../structures/Command';
 import { interactions } from '../../interactions';
 import { ActionRowBuilder, EmbedBuilder, GuildTextBasedChannel, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 import { getGuild } from '../../schemas/guild';
-import { createBounty, getCurrentBounty } from '../../schemas/bounty';
+import { createBounty, getCurrentBounty, getUpcomingBounties } from '../../schemas/bounty';
 import { getNextBounty } from '../../schemas/bounty';
 import { checkBounties } from '../../jobs/checkBounties';
+import { Paginator } from '../../structures/Paginator';
 
 export default new Command({
     interaction: interactions.board,
@@ -15,7 +16,9 @@ export default new Command({
         if (command == 'refresh') {
             if (Date.now() - guild.bounty.lastRefreshed <= 120000) { // Checks if the board was refreshed in the last 15 minutes.
                 return interaction.followUp({ embeds: [client.embeds.error(`The board was last refreshed at: <t:${guild.bounty.lastRefreshed}:R>. Please wait until <t:${guild.bounty.lastRefreshed + 120000} before running this command again.`)] })
-            } 
+            }
+            await interaction.followUp({ embeds: [client.embeds.success('Refreshing bounty board.')] });
+            await checkBounties();
         } else if (command == 'setup') {
             const channel = options.getChannel('channel') as GuildTextBasedChannel;
             if (guild.bounty?.channel == channel.id) {
@@ -26,8 +29,9 @@ export default new Command({
                 const currentBounty = await getCurrentBounty(interaction.guild.id)
                 guild.bounty.channel = channel.id;
                 const bountyBoard = new EmbedBuilder()
-                    .setColor(client.cc.designly)
-                    .setTitle(`Bounty Board`)
+                    .setColor('DarkAqua')
+                    .setTitle('Bounty Board')
+                    .setImage('https://i.imgur.com/3F4Xomv.png')
                     .setTimestamp();
                 if (currentBounty) {
                     bountyBoard.setDescription(`Here's what we know about this week's bounty: ${currentBounty.basicInfo}`);
@@ -37,10 +41,6 @@ export default new Command({
                 }
 
                 const bountyMessage = await channel.send({ embeds: [bountyBoard] });
-                await bountyMessage.pin('To make the bounty board easily accessible.')
-                    .then((p) => {
-                        p.delete();
-                    })
                 guild.bounty.messageID = bountyMessage.id;
                 await interaction.followUp({ embeds: [client.embeds.success(`The bounty board has been successfully configured and is now active in ${channel.toString()}.`)]})
                 return await guild.save()
@@ -97,7 +97,7 @@ export default new Command({
                                 .setLabel('Bounty Timestamps')
                                 .setPlaceholder('When should this bounty start and end?')
                                 .setStyle(TextInputStyle.Short)
-                        ])
+                        ]) 
                 ]);
             await interaction.showModal(modal);
             await interaction.awaitModalSubmit({ time: 120000 })
@@ -123,6 +123,41 @@ export default new Command({
                 })
             .catch();
             return await checkBounties();
-        } 
+        } else if (command == 'bounties upcoming') {
+            const upcomingBounties = await getUpcomingBounties(interaction.guild.id);
+            if (upcomingBounties.length == 0) {
+                return await interaction.followUp({ embeds: [client.embeds.attention('There are no upcoming bounties.')], ephemeral: true })
+            }
+            if (upcomingBounties.length == 1) {
+                const bountyEmbed = new EmbedBuilder()
+                    .setTitle(upcomingBounties[0].title)
+                    .setDescription(`${upcomingBounties[0].description}`)
+                    .addFields(
+                        { name: 'Start Time', value: `<t:${upcomingBounties[0].startDate}:f>` },
+                        { name: 'End Time', value: `<t:${upcomingBounties[0].endDate}:f>`},
+                        { name: 'ID', value: upcomingBounties[0].id }
+                        )
+                    .setImage('https://i.imgur.com/3F4Xomv.png')
+                    .setColor('DarkAqua');
+                return await interaction.followUp({ embeds: [bountyEmbed], ephemeral: true })
+            } else {
+                const mappedBounties = [];
+                upcomingBounties.forEach((b) => {
+                    mappedBounties.push(`**Title:** ${b.title}\n**Description:** ${b.description}\n**Start Time:** <t:${b.startDate}:f>\n**End Time:** <t:${b.endDate}:f>\n**ID:** ${b.id}`)
+                })
+                const itemsEmbed = new EmbedBuilder()
+                    .setDescription('${{array}}')
+                    .setColor(client.cc.designly)
+                    .setFooter({ text: '${{currentPage}} / ${{totalPages}} entires' });
+                const pagination = new Paginator();
+                pagination.start(interaction, {
+                    itemPerPage: 1,
+                    embed: itemsEmbed,
+                    joinWith: '\n',
+                    time: 60000,
+                    array: mappedBounties
+                })
+            }
+        }
     }
 })

@@ -25,7 +25,7 @@ export default new Button({
                 .addFields(
                     { name: 'Start Date', value: `<t:${bounty.startDate}:F>`, inline: false },
                     { name: 'End Date', value: `<t:${bounty.endDate}:F>`, inline: false },
-                    { name: 'Cost', value: `${bounty.cost} tokens`, inline: false },
+                    { name: 'Cost', value: `${bounty.cost} nibs`, inline: false },
                 )
                 .setFooter({ text: `⚠️ Don\'t share this bounty info with anyone, doing so could result in a punishment!` })
             await interaction.followUp({ embeds: [bountyEmbed], ephemeral: true });

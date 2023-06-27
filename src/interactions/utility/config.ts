@@ -52,13 +52,13 @@ export const configCommand = {
                     ]
                 },
                 {
-                    name: 'tokens',
-                    description: 'Set the amount of tokens you want gifted to new members.',
+                    name: 'nibs',
+                    description: 'Set the amount of Nibs you want gifted to new members.',
                     type: ApplicationCommandOptionType.Subcommand,
                     options: [
                         {
                             name: 'amount',
-                            description: 'The amount of tokens you want given to new members.',
+                            description: 'The amount of Nibs you want given to new members.',
                             type: ApplicationCommandOptionType.Number,
                             required: true
                         },

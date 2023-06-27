@@ -19,9 +19,10 @@ export type GuildModelType = {
     }
     welcome: {
         dmMode: boolean;
-        tokens: number;
+        nibs: number;
         active: boolean
-    },
+    };
+    prompt: string;
 }
 
 export type BountyStatus = {
@@ -31,9 +32,12 @@ export type BountyStatus = {
 
 export type UserModelType = {
     userID: Snowflake;
-    guildID: Snowflake;
     balance: number;
-    cooldown: boolean,
+    cooldown: boolean;
+    completedBounties: number;
+    countLastUpdated: number;
+    receivedRoleAt: number;
+    lastCheckIn: number;
 }
 
 export type ItemModalType = {

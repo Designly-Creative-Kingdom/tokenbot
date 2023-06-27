@@ -6,7 +6,7 @@ const schema = new Schema({
     guildID: { type: SchemaTypes.String, required: true },
     welcome: {
         dmMode: { type: SchemaTypes.Boolean, required: true, default: false },
-        tokens: { type: SchemaTypes.Number, required: true, default: 200 },
+        nibs: { type: SchemaTypes.Number, required: true, default: 200 },
         active: { type: SchemaTypes.Boolean, required: true, default: false }
     },
     channels: { type: Array<string>, required: true, default: [] },
@@ -15,7 +15,8 @@ const schema = new Schema({
         channel: { type: SchemaTypes.String, required: false, default: undefined },
         messageID: { type: SchemaTypes.String, required: false, default: undefined },
         lastRefreshed: { type: SchemaTypes.Number, required: false, default: 0 }
-    }
+    },
+    prompt: { type: SchemaTypes.String, required: false }
 }, { versionKey: false });
 
 const guildModel = model<GuildModelType>('guild', schema);
@@ -23,7 +24,7 @@ const guildModel = model<GuildModelType>('guild', schema);
 export async function create(guildID: Snowflake) { 
     return await guildModel.create({ guildID: guildID, welcome: {
         dmMode: false,
-        tokens: 200,
+        nibs: 200,
         active: false
     },
     channels: [],
@@ -36,11 +37,11 @@ export async function getGuild(guildID: Snowflake) {
     return guild;
 }
 
-export async function updateWelcome(guildID: Snowflake, tokens?: number, dmMode?: boolean, active?: boolean) {
-    if (active == undefined && tokens == undefined && dmMode == undefined) return;
+export async function updateWelcome(guildID: Snowflake, nibs?: number, dmMode?: boolean, active?: boolean) {
+    if (active == undefined && nibs == undefined && dmMode == undefined) return;
 
     let toUpdate: any = new Object()
-    if (tokens) toUpdate["tokens"] = tokens;
+    if (nibs) toUpdate["nibs"] = nibs;
     if (active) toUpdate["active"] = active || false;
     if (dmMode) toUpdate["dmMode"] = dmMode || false;
 

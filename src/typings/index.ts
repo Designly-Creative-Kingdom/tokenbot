@@ -74,6 +74,7 @@ export type interactionOptions = {
 	directory: commandDirectories;
 	cooldown?: number;
 	permission?: PermissionResolvable[];
+	default_member_permission: string;
 } & ChatInputApplicationCommandData;
 
 export type commandType = {
@@ -152,6 +153,7 @@ export type EmojisConfigTypes =
 	| 'attention'
 	| 'ping'
 	| 'coin'
+	| 'nibs'
 
 
 export interface emojisConfigTypes {
@@ -159,21 +161,22 @@ export interface emojisConfigTypes {
 	error: string;
 	attention: string;
 	coin: string;
+	nibs: string
 }
 
 export enum emojisConfigDefaults {
 	success = '✅',
 	error = '❌',
 	attention = '❗️',
-	coin = '🪙'
+	coin = '🪙',
+	nibs = '🪶'
 }
 
 export enum RoleIDs {
-	comet = '1060029170710749194',
-	supporter = '1060024306815475814',
+	supereggie = '1060024306815475814',
 	serverBooster = '890622688341671997',
 	professional = '999429787099603064',
 	expert = '999429514050412625',
 	advanced = '999429228992925788',
-	skilled = '999428975661170698'
+	adept = '999428975661170698'
 }

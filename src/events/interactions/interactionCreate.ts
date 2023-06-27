@@ -71,14 +71,7 @@ export default new Event('interactionCreate', async (interaction) => {
 		const buttonName = interaction.customId.split('-')[0];
 		const button = client.buttons.get(buttonName);
 
-		if (!button) {
-			return interaction.reply({
-				embeds: [{
-					description: 'Nothing was found for this button.',
-					color: 0xCC0000
-				}], ephemeral: true
-			});
-		};
+		if (!button) return;
 
 		if (button.permission?.some((perm) => !member.permissions.has(perm))) {
 			return interaction.reply({
@@ -116,17 +109,10 @@ export default new Event('interactionCreate', async (interaction) => {
 	if (interaction.isAnySelectMenu()) {
 		const selectMenuName = interaction.customId.split('-')[0];
 		const values = interaction.values;
-
+		
 		const selectMenu = client.menus.get(selectMenuName);
 
-		if (!selectMenu) {
-			return interaction.reply({
-				embeds: [{
-					description: 'Nothing was found for this select menu.',
-					color: 0xCC0000
-				}], ephemeral: true
-			});
-		}
+		if (!selectMenu) return;
 
 		if (selectMenu.permission?.some((perm) => !member.permissions.has(perm))) {
 			return interaction.reply({
@@ -151,14 +137,7 @@ export default new Event('interactionCreate', async (interaction) => {
 		
 		const modal = client.modals.get(modalName);
 
-		if (!modal) {
-			return interaction.reply({
-				embeds: [{
-					description: 'Nothing was found for this modal.',
-					color: 0xCC0000
-				}], ephemeral: true
-			});
-		};
+		if (!modal) return;
 
 		if (modal.permission?.some((perm) => !member.permissions.has(perm))) {
 			return interaction.reply({

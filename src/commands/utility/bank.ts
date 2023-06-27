@@ -10,27 +10,27 @@ export default new Command({
         await interaction.deferReply({ ephemeral: silent });
         if (subcommand == 'give') {
             const member = options.getUser('user');
-            const amount = options.getInteger('tokens');
-            const user = await getBalance(member.id, interaction.guild.id);
+            const amount = options.getInteger('nibs');
+            const user = await getBalance(member.id);
 
-            const updatedBalance = client.embeds.success(`Added ${amount} to ${member.toString()}\'s bank. Their new balance is ${user.balance + amount}.`)
-            await updateBalance(member.id, interaction.guild.id, user.balance + amount);
+            const updatedBalance = client.embeds.success(`Added ${amount} to ${member.toString()}\'s bank. Their new balance is ${user.balance + amount} Nibs${client.cc.nibs}.`)
+            await updateBalance(member.id, user.balance + amount);
             return interaction.followUp({ embeds: [updatedBalance] });
         } else if (subcommand == 'remove') {
             const member = options.getUser('user');
-            const amount = options.getInteger('tokens');
-            const user = await getBalance(member.id, interaction.guild.id);;
+            const amount = options.getInteger('nibs');
+            const user = await getBalance(member.id);;
 
-            const updatedBalance = client.embeds.success(`Removed ${amount} from ${member.toString()}\'s bank. Their new balance is ${user.balance - amount}.`)
-            await updateBalance(member.id, interaction.guild.id, user.balance - amount); 
+            const updatedBalance = client.embeds.success(`Removed ${amount} from ${member.toString()}\'s bank. Their new balance is ${user.balance - amount} Nibs${client.cc.nibs}.`)
+            await updateBalance(member.id, user?.balance - amount); 
             return interaction.followUp({ embeds: [updatedBalance] });
-        } else if (subcommand == 'get') {
+        } else if (subcommand == 'set') {
             const member = options.getUser('user');
-            const amount = options.getInteger('tokens');
-            const user = await getBalance(member.id, interaction.guild.id);
+            const amount = options.getInteger('nibs');
+            const user = await getBalance(member.id);
 
-            const updatedBalance = client.embeds.success(`Successfully set ${member.toString()}\'s account balance to ${amount}. Their previous balance was ${user.balance}.`);
-            await updateBalance(member.id, interaction.guild.id, amount);
+            const updatedBalance = client.embeds.success(`Successfully set ${member.toString()}\'s account balance to ${amount}. Their previous balance was ${user.balance} Nibs${client.cc.nibs}.`);
+            await updateBalance(member.id, amount);
             return await interaction.followUp({ embeds: [updatedBalance] })
         }
     }

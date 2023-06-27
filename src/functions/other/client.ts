@@ -12,6 +12,7 @@ export const cc = {
 	error: checkEmojis('error'),
 	attention: checkEmojis('attention'),
 	coin: checkEmojis('coin'),
+	nibs: checkEmojis('nibs')
 };
 
 export const clientEmbeds = {

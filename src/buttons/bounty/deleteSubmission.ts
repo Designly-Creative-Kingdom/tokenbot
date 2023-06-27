@@ -1,6 +1,7 @@
 import { Colors, ThreadChannel } from "discord.js";
 import { checkIfCompleted, deleteSubmission, getBountyByTimestamps } from "../../schemas/bounty";
 import { Button } from "../../structures/Button";
+import { getBalance, updateBalance } from "../../schemas/user";
 
 export default new Button({
     customId: 'deleteSubmission',
@@ -26,8 +27,10 @@ export default new Button({
         } else {
             await deleteSubmission(bounty._id, bountyUser.id);
             try {
-                await bountyUser.send({ embeds: [{ title: `${bounty.title}`, description: `Your submission for ${bounty.title} has been deleted by ${interaction.user.toString()}. Feel free to resubmit your files.`, color: Colors.DarkRed }] });
+                await bountyUser.send({ embeds: [{ title: `${bounty.title}`, description: `Your submission for ${bounty.title} has been deleted by ${interaction.user.toString()}. You have been refunded your nibs and can now resubmit this bounty.`, color: Colors.DarkRed }] });
                 await interaction.followUp({ embeds: [client.embeds.success(`${bountyUser.toString()} has been notified that their submission was deleted.`)], ephemeral: true });
+                const balance = await getBalance(bountyUser.id);
+                await updateBalance(bountyUser.id,  Number(bounty.cost) + balance.balance);
                 try {
                     const thread = interaction.channel as ThreadChannel;
                     thread.delete();

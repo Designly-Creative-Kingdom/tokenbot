@@ -21,6 +21,12 @@ export async function getCurrentBounty(guildID: Snowflake) {
     return bounty[0]
 };
 
+export async function getUpcomingBounties(guildID: Snowflake) {
+    const now = await getCurrentBounty(guildID)
+    const bounty = (await bountyModal.find({ guildID })).filter((b) => b.startDate > now?.endDate);
+    return bounty;
+}
+
 export async function getNextBounty(guildID: Snowflake) {
     const bounty = (await bountyModal.find({ guildID: guildID }))?.filter((b) => b?.startDate > Date.now());
     return bounty[0]
@@ -51,7 +57,6 @@ export async function checkIfCompleted(guildID: Snowflake, bountyID: any, userID
 export async function deleteSubmission(bountyID: any, userID: Snowflake) {
     const bounty = await bountyModal.findOne({ _id: bountyID });
     const removedSubmission = bounty.completedBy.filter((b) => { b.userId !== userID});
-    console.log(removedSubmission)
     await bountyModal.findOneAndUpdate({ _id: bountyID }, { $set: { completedBy: removedSubmission } });
 }
 
@@ -73,12 +78,12 @@ export async function markAsPending(bountyID: any, userID: Snowflake) {
 
 export async function markAsAccepted(bountyID: any, userID: Snowflake) {
     const bounty = await bountyModal.findOne({ _id: bountyID });
-    const filter = bounty.completedBy.findIndex((e) => e.userId == userID);
+    const filter = bounty.completedBy.findIndex((e) => { e.userId == userID });
     if (filter !== -1) {
         bounty.completedBy[filter].status = 'approved';
     } else {
         bounty.completedBy.push({ userId: userID, status: 'approved' })
-    }
+    };
     await bounty.save();
 }
 
