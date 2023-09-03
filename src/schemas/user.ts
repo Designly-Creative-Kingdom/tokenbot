@@ -6,10 +6,11 @@ const schema = new Schema<UserModelType>({
     userID: { type: SchemaTypes.String, required: true },
     balance: { type: SchemaTypes.Number, required: true, default: 0 },
     cooldown: { type: SchemaTypes.Boolean, required: true, default: false },
+    generalCooldown: { type: SchemaTypes.Number, required: true, default: 0 },
     completedBounties: { type: SchemaTypes.Number, required: true, default: 0 },
     countLastUpdated: { type: SchemaTypes.Number, required: false },
     receivedRoleAt: { type: SchemaTypes.Number, required: false },
-    lastCheckIn: { type: SchemaTypes.Number, required: false }
+    lastCheckIn: { type: SchemaTypes.Number, required: false, default: 1 }
 }, { versionKey: false });
 
 export const userModel = model<UserModelType>('user', schema);

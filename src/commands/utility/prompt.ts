@@ -27,13 +27,13 @@ export default new Command({
             await interaction.showModal(modal);
             await interaction.awaitModalSubmit({ time: 120000, filter: m => m.customId == 'setPrompt' })
                 .then(async (m) => {
-                    await interaction.reply({ embeds: [client.embeds.success(`Updated the prompt to ${m.fields.getTextInputValue('prompt')}`)], ephemeral: true });
+                    await m.reply({ embeds: [client.embeds.success(`Updated the prompt to ${m.fields.getTextInputValue('prompt')}`)], ephemeral: true });
                     guild.prompt = m.fields.getTextInputValue('prompt');
                     return await guild.save();
                 })
         } else if (command == 'view') {
             const guild = await getGuild(interaction.guild.id);
-            return await interaction.reply({ embeds: [{ color: client.cc.invisible, description: `The current prompt is: ${guild.prompt}.`}]})
+            return await interaction.reply({ embeds: [{ color: client.cc.invisible, description: guild.prompt ? `The current prompt is: ${guild.prompt}` : 'There is no prompt currently set.'}], ephemeral: true })
         }
     }
 })

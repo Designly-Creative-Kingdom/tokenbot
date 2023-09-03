@@ -33,6 +33,7 @@ export type BountyStatus = {
 export type UserModelType = {
     userID: Snowflake;
     balance: number;
+    generalCooldown: number;
     cooldown: boolean;
     completedBounties: number;
     countLastUpdated: number;

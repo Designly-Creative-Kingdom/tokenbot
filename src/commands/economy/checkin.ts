@@ -20,13 +20,22 @@ export default new Command({
             return await interaction.reply({ embeds: [client.embeds.attention(`You can only check in once a week! You last checked in on <t:${user.lastCheckIn}:f>`)], ephemeral: true });
         };
         const guild = await getGuild(interaction.guild.id);
-        if (!guild.prompt) {
+        if (!guild?.prompt) {
             return await interaction.reply({ embeds: [client.embeds.error('There is no prompt configured! Contact a staff member to have a prompt set.')], ephemeral: true });
         }
         const modal = new ModalBuilder()
             .setTitle('Complete the prompt!')
             .setCustomId('checkinPrompt')
             .addComponents([
+                new ActionRowBuilder<TextInputBuilder>()
+                    .addComponents([
+                        new TextInputBuilder()
+                            .setCustomId('prompt')
+                            .setValue(guild.prompt)
+                            .setLabel('Current Prompt')
+                            .setStyle(TextInputStyle.Paragraph)
+                            .setRequired(true)
+                    ]),
                 new ActionRowBuilder<TextInputBuilder>()
                     .addComponents([
                         new TextInputBuilder()
